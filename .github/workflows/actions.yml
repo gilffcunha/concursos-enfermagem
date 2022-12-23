@@ -20,16 +20,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: cache pipenv
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
-
       - name: cache storage file
         uses: actions/cache@v3
         with:
-          path: ~/concursos.txt
+          path: concursos.txt
           key: storage-file
 
       - name: setup python
