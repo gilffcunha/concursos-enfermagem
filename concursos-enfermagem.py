@@ -8,19 +8,26 @@ from email.mime.multipart import MIMEMultipart
 from tabulate import tabulate
 #from dotenv import load_dotenv
 
+# Load environment variables
+#load_dotenv()
+try:
+    #ENV_STORAGE_FILE_PATH = os.getenv('STORAGE_FILE_PATH')
+    #ENV_FROM = os.getenv('FROM')
+    #ENV_PASSWORD = os.getenv('PASSWORD')
+    #ENV_TO = os.getenv('TO')
+    ENV_STORAGE_FILE_PATH = os.environ['STORAGE_FILE_PATH']
+    ENV_FROM = os.environ['FROM']
+    ENV_PASSWORD = os.environ['PASSWORD']
+    ENV_TO = os.environ['TO']
+except KeyError:
+    raise KeyError("Token not available!")
+
 # Check if "concurso" is eligible (i.e. is "Concurso" of "Enfermeiro")
 def is_eligible(post):
     return set(["Concurso", "Enfermeiro"]) <= set(map((lambda a : a.text),post.find("span", {"class": "tags-links"}).find_all("a")))
 
 # Notify of open "concursos" via email
 def send_email(posts):
-    
-    #ENV_FROM = os.getenv('FROM')
-    #ENV_PASSWORD = os.getenv('PASSWORD')
-    #ENV_TO = os.getenv('TO')
-    ENV_FROM = os.environ('FROM')
-    ENV_PASSWORD = os.environ('PASSWORD')
-    ENV_TO = os.environ('TO')
     
     message = MIMEMultipart("alternative")
     message["Subject"] = "Novos Concursos de Enfermagem | " + str(date.today().strftime("%d-%m-%Y"))
@@ -85,7 +92,6 @@ def send_email(posts):
 
 
 ### MAIN ###
-#load_dotenv()
 
 # Get page HTML
 URL = "http://www.aenfermagemeasleis.pt/"
@@ -97,8 +103,6 @@ soup = BeautifulSoup(page.content, "html.parser")
 posts_dict = {}
 
 # Open file of "concursos" already processed
-#ENV_STORAGE_FILE_PATH = os.getenv('STORAGE_FILE_PATH')
-ENV_STORAGE_FILE_PATH = os.environ('STORAGE_FILE_PATH')
 file = open(ENV_STORAGE_FILE_PATH + "/concursos.txt", "r+")
 posts_already_processed = file.read()
 
