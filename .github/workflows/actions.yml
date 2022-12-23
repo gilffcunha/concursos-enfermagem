@@ -12,6 +12,26 @@ jobs:
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content to github runner
 
+      - name: cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: cache pipenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+
+      - name: cache storage file
+        uses: actions/cache@v3
+        with:
+          path: ~/concursos.txt
+          key: storage-file
+
       - name: setup python
         uses: actions/setup-python@v4
         with:
