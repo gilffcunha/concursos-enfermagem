@@ -24,18 +24,8 @@ jobs:
           
       - name: execute py script # run concursos-enfermagem.py
         env:
-          SOME_SECRET: ${{ secrets.SOME_SECRET }}
+          STORAGE_FILE_PATH: ${{ secrets.STORAGE_FILE_PATH }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          FROM: ${{ secrets.FROM }}
+          TO: ${{ secrets.TO }}
         run: python concursos-enfermagem.py
-          
-      - name: commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
-          
-      - name: push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main 
