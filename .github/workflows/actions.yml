@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v2 # checkout the repository content to github runner
 
       - name: cache pip
+        id: cache-pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
@@ -20,11 +21,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: cache storage file
+      - name: cache concursos file
+        id: cache-concursos-file
         uses: actions/cache@v3
         with:
           path: concursos.txt
-          key: storage-file
+          key: ${{ runner.os }}-concursos
 
       - name: setup python
         uses: actions/setup-python@v4
@@ -32,6 +34,7 @@ jobs:
           python-version: '3.9' # install the python version needed
           
       - name: install python packages
+        if: steps.cache-pip.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -43,3 +46,8 @@ jobs:
           FROM: ${{ secrets.FROM }}
           TO: ${{ secrets.TO }}
         run: python concursos-enfermagem.py
+        
+      - name: update concursos file
+        uses: actions/cache/save@v3
+        with:
+            key: ${{ steps.cache-concursos-file.outputs.key }}
