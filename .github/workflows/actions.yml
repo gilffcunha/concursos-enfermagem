@@ -48,4 +48,4 @@ jobs:
       - name: update concursos file
         uses: actions/cache/save@v3
         with:
-            key: ${{ steps.cache-concursos-file.outputs.key }}
+            key: ${{ runner.os }}-concursos
