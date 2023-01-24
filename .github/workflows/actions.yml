@@ -2,7 +2,7 @@ name: run concursos-enfermagem.py
 
 on:
   schedule:
-    - cron: '* * * * *' # At 18:30 every day
+    - cron: '30 18 * * *' # At 18:30 every day
 
 jobs:
   build:
