@@ -48,4 +48,5 @@ jobs:
       - name: update concursos file
         uses: actions/cache/save@v3
         with:
+            path: concursos.txt
             key: ${{ runner.os }}-concursos
