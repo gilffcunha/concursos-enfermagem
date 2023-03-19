@@ -2,7 +2,7 @@ name: run concursos-enfermagem.py
 
 on:
   schedule:
-    - cron: '30 18 * 12 *' # At 18:30 every day
+    - cron: '* * * * *' # At 18:30 every day
 
 jobs:
   build:
@@ -19,15 +19,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
-      - name: cache concursos file
-        id: cache-concursos-file
-        uses: actions/cache@v3
-        with:
-          path: concursos.txt
-          key: ${{ runner.os }}-concursos
-          restore-keys: |
-            ${{ runner.os }}-concursos
 
       - name: setup python
         uses: actions/setup-python@v4
@@ -46,3 +37,12 @@ jobs:
           FROM: ${{ secrets.FROM }}
           TO: ${{ secrets.TO }}
         run: python concursos-enfermagem.py
+        
+      - name: cache concursos file
+        id: cache-concursos-file
+        uses: actions/cache@v3
+        with:
+          path: concursos.txt
+          key: ${{ runner.os }}-concursos
+          restore-keys: |
+            ${{ runner.os }}-concursos
